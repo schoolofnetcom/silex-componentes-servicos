@@ -1,0 +1,33 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Meus posts</h1>
+            <a class="btn btn-primary" href="<?php echo "/admin/posts/create"; ?>">Criar post</a>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Ações</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($posts as $post):?>
+                        <tr>
+                            <td><?php echo $post['id'];?></td>
+                            <td><?php echo $post['title'];?></td>
+                            <td>
+                                <a href="<?php echo "/admin/posts/edit/{$post['id']}"; ?>">
+                                    Editar
+                                </a>|
+                                <a href="<?php echo "/admin/posts/delete/{$post['id']}"; ?>">
+                                    Excluir
+                                </a>
+                            </td>
+                        </tr>
+                    <?php endforeach;?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
