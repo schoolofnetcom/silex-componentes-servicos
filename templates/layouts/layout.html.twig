@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="/build/css/style.css">
+    <link rel="stylesheet" href="{{ asset('build/css/style.css') }}">
 </head>
 <body>
 <nav class="navbar navbar-default">
@@ -35,8 +35,8 @@
         </div>
     </div>
 </nav>
-<?php echo $content; ?>
-<script type="text/javascript" src="/build/js/jquery.min.js"></script>
-<script type="text/javascript" src="/build/js/bootstrap.min.js"></script>
+{% block content %}{% endblock %}
+<script type="text/javascript" src="{{ asset('build/js/jquery.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('build/js/bootstrap.min.js') }}"></script>
 </body>
 </html>

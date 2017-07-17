@@ -4,8 +4,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 $post = $app['controllers_factory'];
 $post->get('/create', function () use ($app) {
-    return $app['view.renderer']->render('posts/create');
-});
+    return $app['twig']->render('posts/create.html.twig');
+})->bind('admin.posts.create');
 
 $post->post('/create', function (Request $request) use ($app) {
     /** @var \Doctrine\DBAL\Connection $db */
@@ -15,18 +15,20 @@ $post->post('/create', function (Request $request) use ($app) {
         'title' => $data['title'],
         'content' => $data['content']
     ]);
-    return $app->redirect('/admin/posts');
-});
+    $url = $app['url_generator']->generate('admin.posts.index');
+    return $app->redirect($url);
+})->bind('admin.posts.store');
 
 $post->get('/', function () use ($app) {
+    dump("luiz carlos");
     /** @var \Doctrine\DBAL\Connection $db */
     $db = $app['db'];
     $sql = "SELECT * FROM posts;";
     $posts = $db->fetchAll($sql);
-    return $app['view.renderer']->render('posts/list', [
+    return $app['twig']->render('posts/list.html.twig', [
         'posts' => $posts
     ]);
-});
+})->bind('admin.posts.index');
 
 $post->get('/edit/{id}', function ($id) use ($app) {
     /** @var \Doctrine\DBAL\Connection $db */
@@ -36,8 +38,8 @@ $post->get('/edit/{id}', function ($id) use ($app) {
     if(!$post){
         $app->abort(404, "Post não encontrado!");
     }
-    return $app['view.renderer']->render('posts/edit', ['post' => $post]);
-});
+    return $app['twig']->render('posts/edit.html.twig', ['post' => $post]);
+})->bind('admin.posts.edit');
 
 $post->post('/edit/{id}', function (Request $request, $id) use ($app) {
     /** @var \Doctrine\DBAL\Connection $db */
@@ -52,8 +54,9 @@ $post->post('/edit/{id}', function (Request $request, $id) use ($app) {
         'title' => $data['title'],
         'content' => $data['content']
     ], ['id' => $id]);
-    return $app->redirect('/admin/posts');
-});
+    $url = $app['url_generator']->generate('admin.posts.index');
+    return $app->redirect($url);
+})->bind('admin.posts.update');
 
 $post->get('/delete/{id}', function ($id) use ($app) {
     /** @var \Doctrine\DBAL\Connection $db */
@@ -64,7 +67,8 @@ $post->get('/delete/{id}', function ($id) use ($app) {
         $app->abort(404, "Post não encontrado!");
     }
     $db->delete('posts', ['id' => $id]);
-    return $app->redirect('/admin/posts');
-});
+    $url = $app['url_generator']->generate('admin.posts.index');
+    return $app->redirect($url);
+})->bind('admin.posts.destroy');
 
 return $post;
